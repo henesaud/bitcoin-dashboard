@@ -1,3 +1,6 @@
+This is a project to improve my Django, DRF, and React skills. It may have some flaws (mainly secure ones).
+The main objective is to develop tools for Bitcoin users, including price dashboards, conversion tools, indicators, wallet visualization, etc. 
+
 ## Configuring Database
 Postgres was used to run this project. However, for an easy run, go to backend > settings.py and substitute the DATABASES constant to: 
 

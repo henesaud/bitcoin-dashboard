@@ -14,7 +14,7 @@ DATABASES = {
 ```
 So you can use the default sqlite3. 
 
-If you want to run with Postgres, you can run the following Docker commands after altering your <local_psql_path> and creating a Docker network called postgres-network:
+If you want to run with Postgres and Pgadmin, you can run the following Docker commands after altering your <local_psql_path> and creating a Docker network called postgres-network:
 
 ```
 docker run --name btc-dash --network=postgres-network -e "POSTGRES_PASSWORD=mypass" -p 5432:5432 -v <local_psql_path>:/var/lib/postgresql/data -d postgres

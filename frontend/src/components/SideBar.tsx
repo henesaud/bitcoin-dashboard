@@ -3,63 +3,31 @@ import { ListItemButton, ListItemIcon, ListItemText, ListSubheader } from '@mui/
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
+
+const generateListIcon = (text: string, icon: JSX.Element) => {
+  return (
+    <>
+      <ListItemButton>
+        <ListItemIcon>
+          {icon}
+        </ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    </>
+  )
+}
+
 export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-  </React.Fragment>
+  <>
+    {generateListIcon('nothing', <DashboardIcon />)}
+  </>
 );
 
 export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
+  <>
+    <ListSubheader component='div' inset>
       Nothing
     </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="nothing" />
-    </ListItemButton>
-  </React.Fragment>
+    {generateListIcon('nothing', <DashboardIcon />)}
+  </>
 );

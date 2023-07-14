@@ -16,6 +16,7 @@ import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Chart from "./components/Chart";
 import { mainListItems, secondaryListItems } from './components/SideBar';
 
 const defaultTheme = createTheme();
@@ -106,6 +107,7 @@ function App() {
                     height: 240,
                   }}
                 >
+                  <Chart />
                   {/* <component here /> */}
                 </Paper>
               </Grid>

@@ -2,41 +2,44 @@ import json
 
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
-from django.views.decorators.http import require_POST
 from rest_framework import authentication
 from rest_framework import status as drf_status
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+@api_view(("GET",))
 def get_csrf(request):
     response = Response({"detail": "CSRF cookie set"})
     response["X-CSRFToken"] = get_token(request)
+    print(response["X-CSRFToken"])
     return response
 
 
-@require_POST
-def login_view(request):
-    data = json.loads(request.body)
-    username = data.get("username")
-    password = data.get("password")
+class LoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
 
-    if username is None or password is None:
-        return Response(
-            {"detail": "Please provide username and password."},
-            status=drf_status.HTTP_400_BAD_REQUEST,
-        )
+        if username is None or password is None:
+            return Response(
+                {"detail": "Please provide username and password."},
+                status=drf_status.HTTP_400_BAD_REQUEST,
+            )
 
-    user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
 
-    if user is None:
-        return Response(
-            {"detail": "Invalid credentials."}, status=drf_status.HTTP_400_BAD_REQUEST
-        )
+        if user is None:
+            return Response(
+                {"detail": "Invalid credentials."},
+                status=drf_status.HTTP_400_BAD_REQUEST,
+            )
 
-    login(request, user)
-    return Response({"detail": "Successfully logged in."})
+        login(request, user)
+        return Response({"detail": "Successfully logged in."})
 
 
 def logout_view(request):

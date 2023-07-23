@@ -42,6 +42,7 @@ class LoginView(APIView):
         return Response({"detail": "Successfully logged in."})
 
 
+@api_view(("GET",))
 def logout_view(request):
     if not request.user.is_authenticated:
         return Response(

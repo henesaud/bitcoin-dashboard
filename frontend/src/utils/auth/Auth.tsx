@@ -12,7 +12,7 @@ const showSwall = (message: string) => {
 
 const getCSRF = async () => {
     try {
-        const response = await fetch("http://localhost:8000/api/csrf/", {
+        const response = await fetch("http://localhost:8000/auth/csrf/", {
             credentials: "include",
         })
         return response.headers.get("X-CSRFToken") || '';
@@ -26,7 +26,7 @@ const login = async (
     csrf: string,
     userData: any,
 ) => {
-    fetch("http://localhost:8000/api/login/", {
+    fetch("http://localhost:8000/auth/login/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const login = async (
 
 const logout = async () => {
     try {
-        const response = await fetch("http://localhost:8000/api/logout", {
+        const response = await fetch("http://localhost:8000/auth/logout", {
             credentials: "include",
         }).then(isResponseOk)
         return response.detail
@@ -65,7 +65,7 @@ const logout = async () => {
 const getSession = async () => {
     try {
         console.log('session')
-        const session = await fetch("http://localhost:8000/api/session/", { credentials: "include" }).then(isResponseOk)
+        const session = await fetch("http://localhost:8000/auth/session/", { credentials: "include" }).then(isResponseOk)
         if (session.isAuthenticated) {
             return true
         }
@@ -78,7 +78,7 @@ const getSession = async () => {
 }
 
 const whoAmI = async () => {
-    return fetch("http://localhost:8000/api/whoami/", {
+    return fetch("http://localhost:8000/auth/whoami/", {
         headers: {
             "Content-Type": "application/json",
         },

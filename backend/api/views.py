@@ -1,41 +1,29 @@
-import json
+import datetime
 
-from django.contrib.auth import authenticate, login, logout
-from django.middleware.csrf import get_token
-from rest_framework import authentication
+import requests
 from rest_framework import status as drf_status
-from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# @api_view(("GET",))
-# def get_csrf(request):
-#     response = Response({"detail": "CSRF cookie set"})
-#     response["X-CSRFToken"] = get_token(request)
-#     print(response["X-CSRFToken"])
-#     return response
 
+class BitcoinMetrics(APIView):
+    def get(self, *args, **kwargs):
+        query_params = self.request.GET.dict()
+        days = query_params["days"]
+        currency = query_params.get("currency") or "usd"
+        chart_end_point = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency={currency}&days={days}&interval=daily"
 
-class BitcoinView(APIView):
-    def get_30d_chart(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        username = data.get("username")
-        password = data.get("password")
+        chart_data = requests.get(
+            chart_end_point, headers={"accept": "application/json"}, timeout=2000
+        )
+        if chart_data.ok:
+            prices = chart_data.json()["prices"]
+            for price in prices:
+                timestamp = price[0]
+                date_from_timestamp = datetime.datetime.fromtimestamp(timestamp / 1e3)
+                price[0] = date_from_timestamp.strftime("%m/%d")
+                price[1] = round(price[1], 2)
 
-        if username is None or password is None:
-            return Response(
-                {"detail": "Please provide username and password."},
-                status=drf_status.HTTP_400_BAD_REQUEST,
-            )
+            return Response(data=prices, status=drf_status.HTTP_200_OK)
 
-        user = authenticate(username=username, password=password)
-
-        if user is None:
-            return Response(
-                {"detail": "Invalid credentials."},
-                status=drf_status.HTTP_400_BAD_REQUEST,
-            )
-
-        login(request, user)
-        return Response({"detail": "Successfully logged in."})
+        return Response(status=drf_status.HTTP_400_BAD_REQUEST)

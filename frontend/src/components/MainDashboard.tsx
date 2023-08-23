@@ -35,8 +35,10 @@ const MainDashboard: React.FC = () => {
                                     height: 240,
                                 }}
                             >
-                                <Chart />
-                                {/* <component here /> */}
+                                <Chart
+                                    chartDataUrl={'http://localhost:8000/api/btc/metrics?days=100'}
+                                    header="Bitcoin Price (usd)"
+                                />
                             </Paper>
                         </Grid>
 

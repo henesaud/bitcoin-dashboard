@@ -6,9 +6,79 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Chart from "./Chart";
+import { Button, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
 
 const MainDashboard: React.FC = () => {
+    const [currency, setCurrency] = React.useState<string>('USD')
+    const [days, setDays] = React.useState<number>(100)
+    const [filterModalOpened, setFilterModalOpened] = React.useState<boolean>(false)
+    const [chartDataUrl, setChartDataUrl] = React.useState<string>('http://localhost:8000/api/btc/metrics?days=100')
+
+    const setNewChartUrl = (days: number, currency: string) => {
+        setChartDataUrl(`http://localhost:8000/api/btc/metrics?days=${days}&currency=${currency}`)
+    }
+
+    const generateCurrencyForm = (currencyOptions: Array<string>) => {
+        return (
+            <FormControl fullWidth margin="normal" variant="standard">
+                <InputLabel id="id-select-label">Currency</InputLabel>
+                <Select
+                    labelId="label-currency-select"
+                    id="id-currency-select"
+                    value={currency}
+                    label="Currency"
+                    onChange={(event: any) => { setCurrency(event.target.value) }}
+                    variant="standard"
+                >
+                    {
+                        currencyOptions.map((element: any) => {
+                            return <MenuItem value={element}>{element}</MenuItem>
+                        })
+                    }
+                </Select>
+
+                <TextField
+                    id="id-days-field"
+                    label="Days"
+                    value={days}
+                    onChange={(event: any) => { setDays(event.target.value) }}
+                    variant="standard"
+                    type="number"
+                    InputProps={{ inputProps: { min: 0, max: 100 } }}
+                />
+            </FormControl>)
+    }
+
+
     return <>
+        <Modal
+            open={filterModalOpened}
+            onClose={() => { setFilterModalOpened(false) }}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                borderRadius: "10px",
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 4,
+            }}>
+                {generateCurrencyForm(['USD', 'BRL'])}
+                {
+                    <Button variant="contained" onClick={() => {
+                        setNewChartUrl(days, currency);
+                        setFilterModalOpened(false)
+                    }
+                    }>Refesh Chart</Button>
+                }
+            </Box>
+        </Modal>
+
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
             <Box
@@ -26,20 +96,25 @@ const MainDashboard: React.FC = () => {
                 <Toolbar />
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                     <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            {<Button variant="contained" onClick={() => { setFilterModalOpened(true) }}>Chart Filters</Button>}
+                        </Grid>
+
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper
                                 sx={{
                                     p: 2,
                                     display: "flex",
                                     flexDirection: "column",
-                                    height: 240,
+                                    height: 400,
                                 }}
                             >
                                 <Chart
-                                    chartDataUrl={'http://localhost:8000/api/btc/metrics?days=100'}
-                                    header="Bitcoin Price (usd)"
+                                    chartDataUrl={chartDataUrl}
+                                    header={`Bitcoin Price (${currency})`}
                                 />
                             </Paper>
+
                         </Grid>
 
                         <Grid item xs={12} md={4} lg={3}>

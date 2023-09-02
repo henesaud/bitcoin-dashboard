@@ -1,7 +1,6 @@
 from django.urls import path
-
-from . import views
+from metrics.views import BitcoinMetrics
 
 urlpatterns = [
-    path("btc/metrics", views.BitcoinMetrics.as_view(), name="btc-metrics"),
+    path("btc/metrics", BitcoinMetrics.as_view(), name="btc-metrics"),
 ]

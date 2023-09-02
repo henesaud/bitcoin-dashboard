@@ -2,47 +2,23 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
 import Title from "./Title";
-import isResponseOk from "../utils/auth/Api";
 import numberFormatter from "../utils/Format";
 
 
-type ChartType = {
+export type ChartType = {
     time: string,
     amount?: number
 }[]
 
 type ChartProps = {
-    chartDataUrl: string,
+    chartData: ChartType,
     header: string
 }
 
-function createData(time: string, amount?: number) {
-    return { time, amount };
-}
 
-const Chart: React.FC<ChartProps> = ({ chartDataUrl, header }) => {
+
+const Chart: React.FC<ChartProps> = ({ chartData, header }) => {
     const theme = useTheme();
-    const [chartData, setChartData] = React.useState<ChartType>([])
-
-    React.useEffect(() => {
-        const fecthChart = async () => {
-            const response = await fetch(chartDataUrl).then(isResponseOk)
-            const chart: ChartType = []
-            if (response) {
-                response.forEach((element: Array<any>) => {
-                    chart.push(createData(element[0], element[1]))
-                });
-                setChartData(chart)
-            }
-        }
-        try {
-            fecthChart()
-        } catch (error: any) {
-            console.log(error)
-        }
-
-    }, [chartDataUrl])
-
     return (
         <>
             <Title>{header}</Title>

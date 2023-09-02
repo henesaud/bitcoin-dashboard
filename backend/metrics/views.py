@@ -17,13 +17,32 @@ class BitcoinMetrics(APIView):
             chart_end_point, headers={"accept": "application/json"}, timeout=2000
         )
         if chart_data.ok:
-            prices = chart_data.json()["prices"]
+            chart_data_json = chart_data.json()
+
+            prices = chart_data_json["prices"]
             for price in prices:
                 timestamp = price[0]
                 date_from_timestamp = datetime.datetime.fromtimestamp(timestamp / 1e3)
                 price[0] = date_from_timestamp.strftime("%m/%d")
                 price[1] = round(price[1], 2)
 
-            return Response(data=prices, status=drf_status.HTTP_200_OK)
+            last_total_volume = (
+                chart_data_json["total_volumes"].pop()
+                if chart_data_json["total_volumes"]
+                else None
+            )
+            last_market_cap = (
+                chart_data_json["market_caps"].pop()
+                if chart_data_json["market_caps"]
+                else None
+            )
+            return Response(
+                data={
+                    "prices": prices,
+                    "total_volume": last_total_volume[1],
+                    "market_cap": last_market_cap[1],
+                },
+                status=drf_status.HTTP_200_OK,
+            )
 
         return Response(status=drf_status.HTTP_400_BAD_REQUEST)

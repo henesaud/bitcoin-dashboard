@@ -5,18 +5,53 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Chart from "./Chart";
-import { Button, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
+import Chart, { ChartType } from "./Chart";
+import { Button, CardContent, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from "@mui/material";
+import isResponseOk from "../utils/auth/Api";
+import numberFormatter from "../utils/Format";
+
+type BtcMetrics = {
+    total_volume: number,
+    market_cap: number
+
+}
 
 const MainDashboard: React.FC = () => {
     const [currency, setCurrency] = React.useState<string>('USD')
     const [days, setDays] = React.useState<number>(100)
     const [filterModalOpened, setFilterModalOpened] = React.useState<boolean>(false)
     const [chartDataUrl, setChartDataUrl] = React.useState<string>('http://localhost:8000/api/btc/metrics?days=100')
-
     const setNewChartUrl = (days: number, currency: string) => {
         setChartDataUrl(`http://localhost:8000/api/btc/metrics?days=${days}&currency=${currency}`)
     }
+    const [chartData, setChartData] = React.useState<ChartType>([])
+    const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0 })
+
+    function createData(time: string, amount?: number) {
+        return { time, amount };
+    }
+    React.useEffect(() => {
+        const fecthChart = async () => {
+            const response = await fetch(chartDataUrl).then(isResponseOk)
+            console.log(response)
+            const chart: ChartType = []
+            if (response) {
+                response.prices.forEach((element: Array<any>) => {
+                    chart.push(createData(element[0], element[1]))
+                });
+                setChartData(chart)
+                setBtcMetrics(
+                    { total_volume: response.total_volume, market_cap: response.market_cap }
+                )
+            }
+        }
+        try {
+            fecthChart()
+        } catch (error: any) {
+            console.log(error)
+        }
+
+    }, [chartDataUrl])
 
     const generateCurrencyForm = (currencyOptions: Array<string>) => {
         return (
@@ -110,7 +145,7 @@ const MainDashboard: React.FC = () => {
                                 }}
                             >
                                 <Chart
-                                    chartDataUrl={chartDataUrl}
+                                    chartData={chartData}
                                     header={`Bitcoin Price (${currency})`}
                                 />
                             </Paper>
@@ -126,7 +161,17 @@ const MainDashboard: React.FC = () => {
                                     height: 240,
                                 }}
                             >
-                                {/* <component here /> */}
+                                <CardContent>
+                                    <Typography sx={{ fontSize: 24 }} color="text.primary" gutterBottom>
+                                        Last 24h Metrics
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                                        Market Cap: {numberFormatter(btcMetrics.market_cap)}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                                        Total Volume: {numberFormatter(btcMetrics.total_volume)}
+                                    </Typography>
+                                </CardContent>
                             </Paper>
                         </Grid>
 

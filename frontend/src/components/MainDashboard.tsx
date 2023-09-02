@@ -33,7 +33,6 @@ const MainDashboard: React.FC = () => {
     React.useEffect(() => {
         const fecthChart = async () => {
             const response = await fetch(chartDataUrl).then(isResponseOk)
-            console.log(response)
             const chart: ChartType = []
             if (response) {
                 response.prices.forEach((element: Array<any>) => {

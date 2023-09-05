@@ -13,7 +13,7 @@ import numberFormatter from "../utils/Format";
 type BtcMetrics = {
     total_volume: number,
     market_cap: number
-
+    mayer_multiple: number
 }
 
 const MainDashboard: React.FC = () => {
@@ -25,7 +25,7 @@ const MainDashboard: React.FC = () => {
         setChartDataUrl(`http://localhost:8000/api/btc/metrics?days=${days}&currency=${currency}`)
     }
     const [chartData, setChartData] = React.useState<ChartType>([])
-    const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0 })
+    const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0, mayer_multiple: 0 })
 
     function createData(time: string, amount?: number) {
         return { time, amount };
@@ -39,9 +39,11 @@ const MainDashboard: React.FC = () => {
                     chart.push(createData(element[0], element[1]))
                 });
                 setChartData(chart)
-                setBtcMetrics(
-                    { total_volume: response.total_volume, market_cap: response.market_cap }
-                )
+                setBtcMetrics({
+                    total_volume: response.total_volume,
+                    market_cap: response.market_cap,
+                    mayer_multiple: response.mayer_multiple
+                })
             }
         }
         try {
@@ -52,7 +54,7 @@ const MainDashboard: React.FC = () => {
 
     }, [chartDataUrl])
 
-    const generateCurrencyForm = (currencyOptions: Array<string>) => {
+    const generateChartParamsForm = (currencyOptions: Array<string>) => {
         return (
             <FormControl fullWidth margin="normal" variant="standard">
                 <InputLabel id="id-select-label">Currency</InputLabel>
@@ -102,7 +104,7 @@ const MainDashboard: React.FC = () => {
                 boxShadow: 24,
                 p: 4,
             }}>
-                {generateCurrencyForm(['USD', 'BRL'])}
+                {generateChartParamsForm(['USD', 'BRL'])}
                 {
                     <Button variant="contained" onClick={() => {
                         setNewChartUrl(days, currency);
@@ -162,12 +164,15 @@ const MainDashboard: React.FC = () => {
                             >
                                 <CardContent>
                                     <Typography sx={{ fontSize: 24 }} color="text.primary" gutterBottom>
-                                        Last 24h Metrics
+                                        Metrics
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                                    <Typography sx={{ fontSize: 16 }} gutterBottom>
+                                        Mayer Multiple: {numberFormatter(btcMetrics.mayer_multiple)}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 16 }} gutterBottom>
                                         Market Cap: {numberFormatter(btcMetrics.market_cap)}
                                     </Typography>
-                                    <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
+                                    <Typography sx={{ fontSize: 16 }} gutterBottom>
                                         Total Volume: {numberFormatter(btcMetrics.total_volume)}
                                     </Typography>
                                 </CardContent>

@@ -178,12 +178,6 @@ const MainDashboard: React.FC = () => {
                                 </CardContent>
                             </Paper>
                         </Grid>
-
-                        <Grid item xs={12}>
-                            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                                {/* <comonent here /> */}
-                            </Paper>
-                        </Grid>
                     </Grid>
                 </Container>
             </Box>

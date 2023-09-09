@@ -15,10 +15,14 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import { CurrencyBitcoin } from '@mui/icons-material';
 
-const pages = ['Test'];
 const settings = [
     { title: 'Login', path: '/Login' },
     { title: 'Logout', path: '/Logout' }
+];
+
+const menu = [
+    { title: 'Metrics', path: '/' },
+    { title: 'Conversions', path: '/conversions' }
 ];
 
 function ResponsiveAppBar() {
@@ -92,11 +96,6 @@ function ResponsiveAppBar() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
                         </Menu>
                     </Box>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -119,13 +118,13 @@ function ResponsiveAppBar() {
                         Bitcoin Utils
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
+                        {menu.map(({ title, path }) => (
                             <Button
-                                key={page}
+                                key={title}
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {page}
+                                <Link to={path} style={{ textDecoration: 'none', color: 'white' }}>{title}</Link>
                             </Button>
                         ))}
                     </Box>

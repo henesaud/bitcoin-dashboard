@@ -9,14 +9,13 @@ from rest_framework.views import APIView
 MAYER_MULTIPLE_DAYS = 200
 
 
-def generate_price_chart_data(prices_data, params):
-    mayer_days = params["mayer_multiple_days"]
-    days = int(params["days"])
+def generate_price_chart_data(prices_data, days, mayer_period):
     selected_period_prices = []
-    for price in prices_data[mayer_days - days :]:
+
+    for price in prices_data[mayer_period - days :]:
         timestamp = price[0]
         date_from_timestamp = datetime.datetime.fromtimestamp(timestamp / 1e3)
-        x_axix = date_from_timestamp.strftime("%m/%d")
+        x_axix = date_from_timestamp.strftime("%d/%m" if days < 356 else "%d/%m/%y")
         y_axix = round(price[1], 2)
         selected_period_prices.append([x_axix, y_axix])
     return selected_period_prices
@@ -32,8 +31,9 @@ def generate_mayer_multiple(prices_data):
 class BitcoinMetrics(APIView):
     def get(self, *args, **kwargs):
         query_params = self.request.GET.dict()
+        days = int(query_params["days"])
         currency = query_params.get("currency") or "usd"
-        chart_end_point = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency={currency}&days={MAYER_MULTIPLE_DAYS}&interval=daily"
+        chart_end_point = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency={currency}&days={max(days, MAYER_MULTIPLE_DAYS)}&interval=daily"
 
         chart_data = requests.get(
             chart_end_point, headers={"accept": "application/json"}, timeout=2000
@@ -43,8 +43,7 @@ class BitcoinMetrics(APIView):
             prices = chart_data_json["prices"]
 
             prices_chart_data = generate_price_chart_data(
-                prices_data=prices,
-                params={**query_params, "mayer_multiple_days": MAYER_MULTIPLE_DAYS},
+                prices_data=prices, days=days, mayer_period=MAYER_MULTIPLE_DAYS
             )
             mayer_multiple = generate_mayer_multiple(prices_data=prices)
             last_total_volume = (

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,7 +17,6 @@ export default function LogIn() {
     const [csrf, setCsrf] = React.useState<string>('')
     const [user, setUser] = React.useState<string>('')
     const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false)
-    const navigate = useNavigate();
 
 
     const executeLogin = async () => {
@@ -43,7 +41,6 @@ export default function LogIn() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         login(csrf, data);
-        navigate('/')
     }
 
     return (

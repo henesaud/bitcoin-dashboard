@@ -1,7 +1,4 @@
 import Swal from 'sweetalert2'
-import isResponseOk from "./Api";
-
-
 
 const showSwall = (message: string) => {
     Swal.fire({
@@ -38,13 +35,12 @@ const login = async (
             password: userData.get('password')
         }),
     })
-        .then(isResponseOk)
+        .then(x => x.json())
         .then((response: any) => {
             showSwall(response.detail)
         })
         .catch((err) => {
             console.log(err)
-            showSwall('Error')
         });
 }
 
@@ -52,7 +48,7 @@ const logout = async () => {
     try {
         const response = await fetch("http://localhost:8000/auth/logout", {
             credentials: "include",
-        }).then(isResponseOk)
+        }).then(x => x.json())
         return response.detail
     } catch (err) {
         console.log(err)
@@ -64,8 +60,7 @@ const logout = async () => {
 
 const getSession = async () => {
     try {
-        console.log('session')
-        const session = await fetch("http://localhost:8000/auth/session/", { credentials: "include" }).then(isResponseOk)
+        const session = await fetch("http://localhost:8000/auth/session/", { credentials: "include" }).then(x => x.json())
         if (session.isAuthenticated) {
             return true
         }
@@ -84,13 +79,12 @@ const whoAmI = async () => {
         },
         credentials: "include",
     })
-        .then(isResponseOk)
+        .then(x => x.json())
         .then(data => {
             return data.username;
         })
         .catch(err => {
             console.log(err)
-            showSwall('Error')
         });
 }
 

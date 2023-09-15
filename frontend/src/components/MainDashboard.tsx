@@ -32,17 +32,18 @@ const MainDashboard: React.FC = () => {
     }
     React.useEffect(() => {
         const fecthChart = async () => {
-            const response = await fetch(chartDataUrl).then(isResponseOk)
+            const response = await fetch(chartDataUrl).then()
+            const result = await isResponseOk(response)
             const chart: ChartType = []
-            if (response) {
-                response.prices.forEach((element: Array<any>) => {
+            if (result) {
+                result.prices.forEach((element: Array<any>) => {
                     chart.push(createData(element[0], element[1]))
                 });
                 setChartData(chart)
                 setBtcMetrics({
-                    total_volume: response.total_volume,
-                    market_cap: response.market_cap,
-                    mayer_multiple: response.mayer_multiple
+                    total_volume: result.total_volume,
+                    market_cap: result.market_cap,
+                    mayer_multiple: result.mayer_multiple
                 })
             }
         }

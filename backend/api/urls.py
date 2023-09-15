@@ -3,4 +3,5 @@ from metrics.views import BitcoinMetrics
 
 urlpatterns = [
     path("metrics/", include("metrics.urls")),
+    path("tools/", include("tools.urls")),
 ]

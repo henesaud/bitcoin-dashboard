@@ -20,9 +20,9 @@ const MainDashboard: React.FC = () => {
     const [currency, setCurrency] = React.useState<string>('USD')
     const [days, setDays] = React.useState<number>(100)
     const [filterModalOpened, setFilterModalOpened] = React.useState<boolean>(false)
-    const [chartDataUrl, setChartDataUrl] = React.useState<string>('http://localhost:8000/api/btc/metrics?days=100')
+    const [chartDataUrl, setChartDataUrl] = React.useState<string>('http://localhost:8000/api/metrics/main_metrics?days=100')
     const setNewChartUrl = (days: number, currency: string) => {
-        setChartDataUrl(`http://localhost:8000/api/btc/metrics?days=${days}&currency=${currency}`)
+        setChartDataUrl(`http://localhost:8000/api/metrics/main_metrics?days=${days}&currency=${currency}`)
     }
     const [chartData, setChartData] = React.useState<ChartType>([])
     const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0, mayer_multiple: 0 })

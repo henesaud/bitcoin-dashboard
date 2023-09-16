@@ -18,14 +18,17 @@ BTC_KEY_PREFIXES = {
 
 
 def convert_key(key, target_prefix):
-    decoded_key_bytes = base58.b58decode_check(key)
-    target_key_bytes = (
-        bytes.fromhex(BTC_KEY_PREFIXES[target_prefix]) + decoded_key_bytes[4:]
-    )
-    return base58.b58encode_check(target_key_bytes)
+    try:
+        decoded_key_bytes = base58.b58decode_check(key)
+        target_key_bytes = (
+            bytes.fromhex(BTC_KEY_PREFIXES[target_prefix]) + decoded_key_bytes[4:]
+        )
+        return base58.b58encode_check(target_key_bytes)
+    except Exception as error:
+        return str(error)
 
 
-class ConvertPublicKey(APIView):
+class PublicKeyConverter(APIView):
     def get(self, *args, **kwargs):
         query_params = self.request.GET.dict()
         key = query_params["key"]
@@ -41,6 +44,11 @@ class ConvertPublicKey(APIView):
 
         converted_key = convert_key(key=key, target_prefix=target_prefix)
         return Response(data=converted_key, status=drf_status.HTTP_200_OK)
+
+
+class PublicKeyTypes(APIView):
+    def get(self, *args, **kwargs):
+        return Response(data=BTC_KEY_PREFIXES.keys(), status=drf_status.HTTP_200_OK)
 
 
 # For tests:

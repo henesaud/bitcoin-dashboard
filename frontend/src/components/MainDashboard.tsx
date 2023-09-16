@@ -131,7 +131,7 @@ const MainDashboard: React.FC = () => {
                 }}
             >
                 <Toolbar />
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container maxWidth="lg">
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             {<Button variant="contained" onClick={() => { setFilterModalOpened(true) }}>Chart Filters</Button>}

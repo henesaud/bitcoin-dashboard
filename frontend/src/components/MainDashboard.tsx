@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import Chart, { ChartType } from "./Chart";
 import { Button, CardContent, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from "@mui/material";
 import isResponseOk from "../utils/auth/Api";
-import numberFormatter from "../utils/Format";
+import numberFormatter from "../utils/format";
 
 type BtcMetrics = {
     total_volume: number,

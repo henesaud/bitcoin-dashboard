@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
 import Title from "./Title";
-import numberFormatter from "../utils/Format";
+import numberFormatter from "../utils/format";
 
 
 export type ChartType = {

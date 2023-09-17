@@ -10,6 +10,7 @@ import isResponseOk from "../utils/auth/Api";
 import Dict from "../utils/types";
 import Swal from "sweetalert2";
 import copyTextToClipboard from "../utils/others";
+import Title from "./Title";
 
 
 const Conversions: React.FC = () => {
@@ -76,70 +77,72 @@ const Conversions: React.FC = () => {
                 }}
             >
                 <Toolbar />
-                <Container  >
-                    <Grid container spacing={1}>
-                        <Grid item xs={20} >
-                            <Paper
-                                sx={{
-                                    p: 5,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    height: 400,
-                                }}
-                            >
-                                <FormControl
-                                    margin="normal" variant="standard">
-                                    <InputLabel id="id-select-label">Target Key Type</InputLabel>
-                                    <Select
-                                        id="id-key-select"
-                                        name='targetPrefix'
-                                        value={conversionFormData.targetPrefix}
-                                        onChange={handleChange}
-                                        variant="standard"
-                                    >
-                                        {
-                                            targetKeyTypes.map((element: any) => {
-                                                return <MenuItem value={element}>{element}</MenuItem>
-                                            })
-                                        }
-                                    </Select>
-                                    <TextField
-                                        id="id-key-field"
-                                        name="publicKey"
-                                        label="Public Key"
-                                        value={conversionFormData.publicKey}
-                                        onChange={handleChange}
-                                        variant="standard"
-                                        type="text"
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        sx={{ marginY: 4, marginX: 52 }}
-                                        onClick={() => { fetchData(conversionFormData) }}>Convert Key
-                                    </Button>
-                                    <TextField
-                                        id="id-converted-field"
-                                        name="convertedKey"
-                                        label="Converted Key"
-                                        value={conversionFormData.convertedKey}
-                                        variant="standard"
-                                        type="text"
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <Button
-                                        variant="outlined"
-                                        sx={{ marginY: 4, marginX: 52 }}
-                                        onClick={() => {
-                                            copyTextToClipboard(conversionFormData.convertedKey.toString())
-                                        }}>
-                                        Copy key
-                                    </Button>
-                                </FormControl>
-                            </Paper>
+                <Container >
+                    <div className="public-key-converter">
+                        <Grid container spacing={1} >
+                            <Grid item xs={20} >
+                                <Paper
+                                    sx={{
+                                        p: 5,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <Title>Extended Public Key Converter</Title>
+                                    <FormControl
+                                        margin="normal" variant="standard">
+                                        <InputLabel id="id-select-label">Target Key Type</InputLabel>
+                                        <Select
+                                            id="id-key-select"
+                                            name='targetPrefix'
+                                            value={conversionFormData.targetPrefix}
+                                            onChange={handleChange}
+                                            variant="standard"
+                                        >
+                                            {
+                                                targetKeyTypes.map((element: any) => {
+                                                    return <MenuItem value={element}>{element}</MenuItem>
+                                                })
+                                            }
+                                        </Select>
+                                        <TextField
+                                            id="id-key-field"
+                                            name="publicKey"
+                                            label="Public Key"
+                                            value={conversionFormData.publicKey}
+                                            onChange={handleChange}
+                                            variant="standard"
+                                            type="text"
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            sx={{ marginY: 4, marginX: 52 }}
+                                            onClick={() => { fetchData(conversionFormData) }}>Convert Key
+                                        </Button>
+                                        <TextField
+                                            id="id-converted-field"
+                                            name="convertedKey"
+                                            label="Converted Key"
+                                            value={conversionFormData.convertedKey}
+                                            variant="standard"
+                                            type="text"
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                        <Button
+                                            variant="outlined"
+                                            sx={{ marginY: 4, marginX: 52 }}
+                                            onClick={() => {
+                                                copyTextToClipboard(conversionFormData.convertedKey.toString())
+                                            }}>
+                                            Copy key
+                                        </Button>
+                                    </FormControl>
+                                </Paper>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </div>
                 </Container>
             </Box>
         </Box>

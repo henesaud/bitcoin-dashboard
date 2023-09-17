@@ -140,7 +140,7 @@ const MainDashboard: React.FC = () => {
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper
                                 sx={{
-                                    p: 2,
+                                    p: 5,
                                     display: "flex",
                                     flexDirection: "column",
                                     height: 400,

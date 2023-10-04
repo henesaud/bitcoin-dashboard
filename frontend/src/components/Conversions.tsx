@@ -80,7 +80,7 @@ const Conversions: React.FC = () => {
                 <Container >
                     <div className="public-key-converter">
                         <Grid container spacing={1} >
-                            <Grid item xs={20} >
+                            <Grid item xs={12} >
                                 <Paper
                                     sx={{
                                         p: 5,

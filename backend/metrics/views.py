@@ -23,7 +23,7 @@ def generate_price_chart_data(prices_data, days, mayer_period):
 
 def generate_mayer_multiple(prices_data):
     last_price_value = prices_data[-1][1]
-    avg_price = mean([x[1] for x in prices_data])
+    avg_price = mean([x[1] for x in prices_data[-MAYER_MULTIPLE_DAYS:]])
     mayer_multiple = last_price_value / avg_price
     return round(mayer_multiple, 2)
 

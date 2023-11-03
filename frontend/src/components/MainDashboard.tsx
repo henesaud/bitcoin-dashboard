@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Chart, { ChartType } from "./Chart";
+import Chart, { ChartType, createChartData } from "./Chart";
 import { Button, CardContent, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from "@mui/material";
 import isResponseOk from "../utils/auth/Api";
 import numberFormatter from "../utils/format";
@@ -20,25 +20,22 @@ const MainDashboard: React.FC = () => {
     const [currency, setCurrency] = React.useState<string>('USD')
     const [days, setDays] = React.useState<number>(100)
     const [filterModalOpened, setFilterModalOpened] = React.useState<boolean>(false)
-    const [chartDataUrl, setChartDataUrl] = React.useState<string>('http://localhost:8000/api/metrics/main_metrics?days=100')
-    const setNewChartUrl = (days: number, currency: string) => {
-        setChartDataUrl(`http://localhost:8000/api/metrics/main_metrics?days=${days}&currency=${currency}`)
-    }
     const [chartData, setChartData] = React.useState<ChartType>([])
     const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0, mayer_multiple: 0 })
 
-    function createData(time: string, amount?: number) {
-        return { time, amount };
+    const getNewMetricsUrl = (days: number = 100, currency: string = 'usd') => {
+        return `http://localhost:8000/api/metrics/main_metrics?days=${days}&currency=${currency}`
     }
-    React.useEffect(() => {
-        const fecthChart = async () => {
-            const response = await fetch(chartDataUrl).then()
+
+    const fetchMetricData = async (metricsUrl: string) => {
+        try {
+            const response = await fetch(metricsUrl).then()
             const result = await isResponseOk(response)
-            const chart: ChartType = []
             if (result) {
+                const chart: ChartType = []
                 result.prices.forEach((element: Array<any>) => {
-                    chart.push(createData(element[0], element[1]))
-                });
+                    chart.push(createChartData(element[0], element[1]))
+                })
                 setChartData(chart)
                 setBtcMetrics({
                     total_volume: result.total_volume,
@@ -46,14 +43,10 @@ const MainDashboard: React.FC = () => {
                     mayer_multiple: result.mayer_multiple
                 })
             }
-        }
-        try {
-            fecthChart()
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
         }
-
-    }, [chartDataUrl])
+    }
 
     const generateChartParamsForm = (currencyOptions: Array<string>) => {
         return (
@@ -86,6 +79,10 @@ const MainDashboard: React.FC = () => {
             </FormControl>)
     }
 
+    React.useEffect(() => {
+        fetchMetricData(getNewMetricsUrl())
+    }, [])
+
 
     return <>
         <Modal
@@ -108,7 +105,8 @@ const MainDashboard: React.FC = () => {
                 {generateChartParamsForm(['USD', 'BRL'])}
                 {
                     <Button variant="contained" onClick={() => {
-                        setNewChartUrl(days, currency);
+                        const metricsUrl = getNewMetricsUrl(days, currency)
+                        fetchMetricData(metricsUrl)
                         setFilterModalOpened(false)
                     }
                     }>Refesh Chart</Button>

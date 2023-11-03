@@ -16,6 +16,10 @@ type ChartProps = {
 }
 
 
+export const createChartData = (time: string, amount?: number) => {
+    return { time, amount };
+}
+
 
 const Chart: React.FC<ChartProps> = ({ chartData, header }) => {
     const theme = useTheme();

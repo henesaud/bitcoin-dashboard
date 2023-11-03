@@ -133,11 +133,11 @@ const MainDashboard: React.FC = () => {
                 <Toolbar />
                 <Container maxWidth="lg">
                     <Grid container spacing={3}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             {<Button variant="contained" onClick={() => { setFilterModalOpened(true) }}>Chart Filters</Button>}
                         </Grid>
 
-                        <Grid item xs={12} md={8} lg={9}>
+                        <Grid item xs={8} >
                             <Paper
                                 sx={{
                                     p: 5,
@@ -151,10 +151,9 @@ const MainDashboard: React.FC = () => {
                                     header={`Bitcoin Price (${currency})`}
                                 />
                             </Paper>
-
                         </Grid>
 
-                        <Grid item xs={12} md={4} lg={3}>
+                        <Grid item xs={4} >
                             <Paper
                                 sx={{
                                     p: 2,

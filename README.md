@@ -20,39 +20,4 @@ docker-compose exec backend python manage.py migrate
 docker-compose exec backend python manage.py createsuperuser
 ```
 
-The application should be accessible at http://localhost:81. Test it by logging in with the superuser that you just created. 
-
-## Running manually
-You can also run it manually on your local machine
-
-Enter in the backend folder and  create a virtual env:
-
-```
-python -m venv .venv
-```
-
-Activate the env
-
-```
-source .venv/bin/activate
-```
-
-
-Install the dependencies with
-
-```
-pip install -r requirements.txt
-```
-
-Now, run the command
-
-```
-python manage.py runserver
-```
-
-Then, enter in the ../frontend folder and execute
-
-```
-yarn install
-yarn start
-```
+The application should be accessible at http://localhost:3000. Test it by logging in with the superuser that you just created. 

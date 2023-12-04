@@ -17,11 +17,22 @@ type BtcMetrics = {
 }
 
 const MainDashboard: React.FC = () => {
-    const [currency, setCurrency] = React.useState<string>('USD')
-    const [days, setDays] = React.useState<number>(100)
+    const [chartArgs, setChartArgs] = React.useState({
+        currency: 'USD',
+        days: 100
+    })
     const [filterModalOpened, setFilterModalOpened] = React.useState<boolean>(false)
     const [chartData, setChartData] = React.useState<ChartType>([])
     const [btcMetrics, setBtcMetrics] = React.useState<BtcMetrics>({ total_volume: 0, market_cap: 0, mayer_multiple: 0 })
+
+    const handleChange = (e: any) => {
+        setChartArgs((prev) => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value
+            }
+        })
+    }
 
     const getNewMetricsUrl = (days: number = 100, currency: string = 'usd') => {
         return `http://localhost:8000/api/metrics/main_metrics?days=${days}&currency=${currency}`
@@ -55,9 +66,10 @@ const MainDashboard: React.FC = () => {
                 <Select
                     labelId="label-currency-select"
                     id="id-currency-select"
-                    value={currency}
+                    name="currency"
+                    value={chartArgs.currency}
                     label="Currency"
-                    onChange={(event: any) => { setCurrency(event.target.value) }}
+                    onChange={(event: any) => { handleChange(event) }}
                     variant="standard"
                 >
                     {
@@ -70,11 +82,12 @@ const MainDashboard: React.FC = () => {
                 <TextField
                     id="id-days-field"
                     label="Days"
-                    value={days}
-                    onChange={(event: any) => { setDays(event.target.value) }}
+                    name="days"
+                    value={chartArgs.days}
+                    onChange={(event: any) => { handleChange(event) }}
                     variant="standard"
                     type="number"
-                    InputProps={{ inputProps: { min: 0, max: 100 } }}
+                    InputProps={{ inputProps: { min: 0 } }}
                 />
             </FormControl>)
     }
@@ -105,7 +118,7 @@ const MainDashboard: React.FC = () => {
                 {generateChartParamsForm(['USD', 'BRL'])}
                 {
                     <Button variant="contained" onClick={() => {
-                        const metricsUrl = getNewMetricsUrl(days, currency)
+                        const metricsUrl = getNewMetricsUrl(chartArgs.days, chartArgs.currency)
                         fetchMetricData(metricsUrl)
                         setFilterModalOpened(false)
                     }
@@ -146,7 +159,7 @@ const MainDashboard: React.FC = () => {
                             >
                                 <Chart
                                     chartData={chartData}
-                                    header={`Bitcoin Price (${currency})`}
+                                    header={`Bitcoin Price (${chartArgs.currency})`}
                                 />
                             </Paper>
                         </Grid>

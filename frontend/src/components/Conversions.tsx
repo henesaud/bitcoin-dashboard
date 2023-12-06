@@ -24,7 +24,7 @@ const Conversions: React.FC = () => {
     React.useEffect(() => {
         const fetchKeyTypes = async () => {
             const url = `http://localhost:8000/api/tools/pk_types`
-            const response = await fetch(url).then()
+            const response = await fetch(url)
             const result = await isResponseOk(response)
             if (result) {
                 setTargetKeyTypes(result)
@@ -36,7 +36,7 @@ const Conversions: React.FC = () => {
     const fetchData = async (conversionFormData: Dict) => {
         if (conversionFormData.targetPrefix && conversionFormData.publicKey) {
             const url = `http://localhost:8000/api/tools/pk_converter?target_prefix=${conversionFormData.targetPrefix}&key=${conversionFormData.publicKey}`
-            const response = await fetch(url).then()
+            const response = await fetch(url)
             const result = await isResponseOk(response)
             if (result) {
                 setConversionFormData({

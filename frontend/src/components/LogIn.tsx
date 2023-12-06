@@ -20,10 +20,10 @@ export default function LogIn() {
 
 
     const executeLogin = async () => {
-        const session = await getSession().then()
+        const session = await getSession()
         setIsAuthenticated(session)
         if (session) {
-            const user = await whoAmI().then()
+            const user = await whoAmI()
             setUser(user)
         } else {
             const csrf = await getCSRF()

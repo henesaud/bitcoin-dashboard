@@ -40,7 +40,7 @@ const MainDashboard: React.FC = () => {
 
     const fetchMetricData = async (metricsUrl: string) => {
         try {
-            const response = await fetch(metricsUrl).then()
+            const response = await fetch(metricsUrl)
             const result = await isResponseOk(response)
             if (result) {
                 const chart: ChartType = []

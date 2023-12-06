@@ -14,11 +14,11 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import { CurrencyBitcoin } from '@mui/icons-material';
+import { getSession, whoAmI } from '../utils/auth/Auth';
 
-const settings = [
-    { title: 'Login', path: '/Login' },
-    { title: 'Logout', path: '/Logout' }
-];
+
+const LOGIN_TEXT_INFO = { title: 'Login', path: '/Login' }
+const LOGOUT_TEXT_INFO = { title: 'Logout', path: '/Logout' }
 
 const menu = [
     { title: 'Metrics', path: '/' },
@@ -28,6 +28,29 @@ const menu = [
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [userName, setUserName] = React.useState<string>('')
+    const [settings, setSettings] = React.useState<Array<{ [key: string]: string }>>([
+        LOGIN_TEXT_INFO, LOGOUT_TEXT_INFO
+    ])
+
+    React.useEffect(() => {
+        const fetchSessionAndSetUserName = async () => {
+            const session = await getSession()
+            if (session) {
+                const user = await whoAmI()
+                setUserName(user)
+                setSettings([
+                    LOGOUT_TEXT_INFO
+                ])
+            } else {
+                setSettings([
+                    LOGIN_TEXT_INFO,
+                ])
+                setUserName('')
+            }
+        }
+        fetchSessionAndSetUserName()
+    }, [anchorElUser])
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -151,6 +174,8 @@ function ResponsiveAppBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                            {userName ? <Typography textAlign="center">{`User: ${userName}`}</Typography> : <></>}
+
                             {settings.map(({ title, path }) => (
                                 <MenuItem key={title} onClick={handleCloseUserMenu}>
                                     <Link to={path} style={{ textDecoration: 'none' }}><Typography textAlign="center">{title}</Typography></Link>
